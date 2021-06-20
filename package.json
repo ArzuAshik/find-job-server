@@ -1,0 +1,30 @@
+{
+  "name": "find-job-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArzuAshik/find-job-server.git"
+  },
+  "author": "AR Arzu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ArzuAshik/find-job-server/issues"
+  },
+  "homepage": "https://github.com/ArzuAshik/find-job-server#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongodb": "^3.6.9"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
