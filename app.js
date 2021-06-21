@@ -42,7 +42,7 @@ client.connect(e => {
    
     //==================== All API =========================
     app.get("/all-jobs", (req, res) => {
-        jobs.find({})
+        jobs.find({status: 1})
         .toArray((err, allJobs) => res.send(allJobs));
     });
     app.post("/my-jobs", (req, res) => {
