@@ -83,14 +83,14 @@ client.connect(e => {
     });
 
     app.post("/sign-up", (req, res) => {
-        const {name, accountType, email, password} = req.body;
+        const {name, accountType, email, password, accountBalance} = req.body;
         if(accountType && name && email && password){
-            users.insertOne({name, accountType, email, password, accountBalance: 0})
+            users.insertOne({name, accountType, email, password, accountBalance})
             .then(() => {
-              res.send("Success");
+              res.send({status: "Success"});
             });
         }else{
-            res.send("failed");
+            res.send({status: "Failed"});
         }
     });
     app.post("/payment-success", (req, res) => {
