@@ -97,7 +97,6 @@ client.connect(e => {
     });
     app.post("/payment", async (req, res) => {
         const {id, amount} = req.body;
-        console.log(id, amount);
         const paymentIntent = await stripe.paymentIntents.create({
             amount,
             currency: "usd",
@@ -105,7 +104,6 @@ client.connect(e => {
             confirm: true
         
           });
-          console.log(paymentIntent);
         if(paymentIntent.amount > 0){
             res.send({message: "Payment Successful.", status: "success"});
         } else{
