@@ -59,10 +59,10 @@ client.connect(e => {
         if(userID && tag && companyName && price && description){
             jobs.insertOne({userID, tag, company_name: companyName, price, description, status: 0})
             .then(() => {
-              res.send("Success");
+              res.send({message: "Success", status: "success"});
             });
         }else{
-            res.send("failed");
+            res.send({message: "failed", status: "error"});
         }
     });
     app.post("/apply-for-job", (req, res) => {
@@ -70,10 +70,10 @@ client.connect(e => {
         if(userID && name && jobID){
             applications.insertOne({name, jobID, userID})
             .then((e) => {
-              res.send("Success");
+              res.send({message: "Success", status: "success"});
             });
         }else{
-            res.send("failed");
+            res.send({message: "failed", status: "error"});
         }
     });
     app.post("/application-for-single-job", (req, res) => {
@@ -87,10 +87,10 @@ client.connect(e => {
         if(accountType && name && email && password){
             users.insertOne({name, accountType, email, password, accountBalance})
             .then(() => {
-              res.send({status: "Success"});
+              res.send({message: "Success", status: "success"});
             });
         }else{
-            res.send({status: "Failed"});
+            res.send({message: "Failed", status: "error"});
         }
     });
     app.post("/payment-success", (req, res) => {
@@ -98,9 +98,9 @@ client.connect(e => {
         users.updateOne({ _id: ObjectID(userID) }, {$set: {accountBalance}})
         .then(result => {
             if(result.modifiedCount > 0){
-                res.send("Payment Successful.");
+                res.send({message: "Payment Successful.", status: "success"});
             }else{
-                res.send("Payment Failed!");
+                res.send({message: "Payment Failed!", status: "error"});
             }
           });
     });
@@ -109,9 +109,9 @@ client.connect(e => {
         jobs.updateOne({ _id: ObjectID(jobID) }, {$set: {status: 1}})
         .then(result => {
             if(result.modifiedCount > 0){
-                res.send("Update Successful.");
+                res.send({message: "Update Successful.", status: "success"});
             }else{
-                res.send("Update Failed!");
+                res.send({message: "Update Failed!", status: "error"});
             }
           });
     });
