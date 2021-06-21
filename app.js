@@ -5,6 +5,8 @@ const ObjectID = require("mongodb").ObjectID;
 const app = express();
 const MongoClient = require("mongodb").MongoClient;
 
+const stripe = require("stripe")("sk_test_51J4nbqCGTM1umYl0NdAsvf6Bs3Vfu9vKaY6nFd7apK1eApGQUAfyikfiREGSbtxPGQePrAly1vJXAY0jVaBRs7yb007MFRsprh");
+
 // Middleware
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -59,10 +61,10 @@ client.connect(e => {
         if(userID && tag && companyName && price && description){
             jobs.insertOne({userID, tag, company_name: companyName, price, description, status: 0})
             .then(() => {
-              res.send({message: "Success", status: "success"});
+              res.send({message: "New Job Created Successfully.", status: "success"});
             });
         }else{
-            res.send({message: "failed", status: "error"});
+            res.send({message: "Failed to create New Job!", status: "error"});
         }
     });
     app.post("/apply-for-job", (req, res) => {
@@ -70,10 +72,10 @@ client.connect(e => {
         if(userID && name && jobID){
             applications.insertOne({name, jobID, userID})
             .then((e) => {
-              res.send({message: "Success", status: "success"});
+              res.send({message: "Apply for this job Successful", status: "success"});
             });
         }else{
-            res.send({message: "failed", status: "error"});
+            res.send({message: "Failed to apply for this job. Please Try Again.", status: "error"});
         }
     });
     app.post("/application-for-single-job", (req, res) => {
@@ -87,22 +89,28 @@ client.connect(e => {
         if(accountType && name && email && password){
             users.insertOne({name, accountType, email, password, accountBalance})
             .then(() => {
-              res.send({message: "Success", status: "success"});
+              res.send({message: "Sign Up Successful.", status: "success"});
             });
         }else{
-            res.send({message: "Failed", status: "error"});
+            res.send({message: "Sign Up Failed!", status: "error"});
         }
     });
-    app.post("/payment-success", (req, res) => {
-        const {userID, amount: accountBalance = 0} = req.body;
-        users.updateOne({ _id: ObjectID(userID) }, {$set: {accountBalance}})
-        .then(result => {
-            if(result.modifiedCount > 0){
-                res.send({message: "Payment Successful.", status: "success"});
-            }else{
-                res.send({message: "Payment Failed!", status: "error"});
-            }
+    app.post("/payment", async (req, res) => {
+        const {id, amount} = req.body;
+        console.log(id, amount);
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount,
+            currency: "usd",
+            payment_method: id,
+            confirm: true
+        
           });
+          console.log(paymentIntent);
+        if(paymentIntent.amount > 0){
+            res.send({message: "Payment Successful.", status: "success"});
+        } else{
+            res.send({message: "Payment Failed!", status: "error"});
+        }
     });
     app.post("/update-job-status", (req, res) => {
         const {jobID} = req.body;
